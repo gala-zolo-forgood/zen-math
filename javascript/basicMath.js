@@ -40,7 +40,14 @@ const basicMath = {
       result *= i;
     }
     return result;
-  }
+  },
+
+  gcd: function(a, b) {
+    if (b === 0) {
+      return a;
+    }
+    return basicMath.gcd(b, a % b);
+  },
 };
 
 module.exports = basicMath;
