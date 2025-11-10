@@ -61,6 +61,47 @@ const statisticsCalculator = {
     });
     
     return modes;
+  },
+
+  calculateSkewness: function(numbers) {
+    if (numbers.length === 0) {
+      throw new Error("Empty array");
+    }
+    if (numbers.length < 3) {
+      throw new Error("Skewness requires at least 3 data points");
+    }
+    
+    const mean = this.calculateMean(numbers);
+    const stdDev = this.calculateStandardDeviation(numbers);
+    const n = numbers.length;
+    
+    const sumCubedDeviations = numbers.reduce((acc, val) => {
+      return acc + Math.pow((val - mean) / stdDev, 3);
+    }, 0);
+    
+    return (n / ((n - 1) * (n - 2))) * sumCubedDeviations;
+  },
+
+  calculateKurtosis: function(numbers) {
+    if (numbers.length === 0) {
+      throw new Error("Empty array");
+    }
+    if (numbers.length < 4) {
+      throw new Error("Kurtosis requires at least 4 data points");
+    }
+    
+    const mean = this.calculateMean(numbers);
+    const stdDev = this.calculateStandardDeviation(numbers);
+    const n = numbers.length;
+    
+    const sumFourthPowerDeviations = numbers.reduce((acc, val) => {
+      return acc + Math.pow((val - mean) / stdDev, 4);
+    }, 0);
+    
+    const kurtosis = (n * (n + 1) / ((n - 1) * (n - 2) * (n - 3))) * sumFourthPowerDeviations;
+    const correction = 3 * Math.pow(n - 1, 2) / ((n - 2) * (n - 3));
+    
+    return kurtosis - correction;
   }
 };
 
