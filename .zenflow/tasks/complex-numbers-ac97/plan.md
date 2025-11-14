@@ -195,7 +195,7 @@ node typescript/build/testComplexNumbers.js
 # All Phase 2 tests should PASS
 ```
 
-### [ ] Step: Phase 3 - Arithmetic Operations (Addition and Subtraction)
+### [x] Step: Phase 3 - Arithmetic Operations (Addition and Subtraction)
 <!-- chat-id: e331d3c1-d46c-4127-a1a6-bfc40e88fb70 -->
 <!-- Implementation Phase 2 Part 1 -->
 
@@ -338,7 +338,7 @@ node typescript/build/testComplexNumbers.js
 # All Phase 5 tests should PASS
 ```
 
-### [ ] Step: Phase 6 - Polar Form Support
+### [x] Step: Phase 6 - Polar Form Support
 <!-- chat-id: bc6064dd-82c1-46a2-8806-fec7b8762700 -->
 <!-- Implementation Phase 4 -->
 
