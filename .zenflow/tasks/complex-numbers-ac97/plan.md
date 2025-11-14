@@ -87,14 +87,473 @@ The verification for each deliverable should be executable by a coding agent usi
 
 Save the spec to `{@artifacts_path}/spec.md`.
 
-### [ ] Step: Implementation Plan
+### [x] Step: Implementation Plan
+<!-- chat-id: 44fd4998-3c86-436b-af0a-9189d8f7b0c6 -->
 
 Based on the technical spec in `{@artifacts_path}/spec.md`, create a detailed task plan and update `{@artifacts_path}/plan.md`. Each task should have task definition, references to contracts to be used/implemented, deliverable definition and verification instructions.
 
-Format each task as 
+Format each task as
 ```
 ### [ ] Step: <task_name>
 Task instructions
 ```
 
 "Step:" prefix is important, do not omit it!
+
+---
+
+## Implementation Tasks
+
+### [ ] Step: Phase 1 - Create Test Infrastructure
+<!-- Implementation Phase 1 Preparation -->
+
+**Task Definition**: Create the test script infrastructure that will be used to verify all subsequent phases of development.
+
+**Contracts Referenced**:
+- Test script structure from spec.md:284-322
+
+**Task Instructions**:
+1. Create `typescript/testComplexNumbers.ts` with:
+   - Basic test harness with assertion helper function
+   - Console output for PASS/FAIL status
+   - Test structure supporting incremental addition of test cases
+   - Initial placeholder tests for Phase 1 verification
+
+2. The test file should include:
+   - Helper function `assert(condition: boolean, message?: string): void` that throws on failure
+   - Helper function `assertClose(actual: number, expected: number, tolerance: number = 1e-10): void` for floating-point comparisons
+   - Test runner that catches errors and reports results
+   - Color-coded output (if possible) for pass/fail
+
+**Deliverable**:
+- File `typescript/testComplexNumbers.ts` created and compilable
+- Test harness can be executed (even with placeholder tests)
+
+**Verification Instructions**:
+```bash
+# Compile test file
+tsc --noEmit typescript/testComplexNumbers.ts
+
+# Should compile successfully with exit code 0
+echo $?
+```
+
+### [ ] Step: Phase 2 - Core ComplexNumber Class with Cartesian Construction
+<!-- Implementation Phase 1 from spec -->
+
+**Task Definition**: Implement the foundational ComplexNumber class with Cartesian coordinate construction, validation, and basic accessors.
+
+**Contracts Referenced**:
+- Class structure from spec.md:66-96
+- Constructor signature from spec.md:110-116
+- Accessor methods from spec.md:129-131
+- Input validation from spec.md:169-172
+- Error handling pattern from basicMath.ts:15-17
+
+**Task Instructions**:
+1. Create `typescript/complexNumbers.ts` with:
+   - Export a `ComplexNumber` class
+   - Private readonly fields: `real: number`, `imag: number`
+   - Constructor `constructor(real: number, imaginary?: number)` with:
+     - Default value 0 for imaginary parameter
+     - Validation: both inputs must be finite numbers
+     - Throw `Error("Real part must be a finite number")` if real is not finite
+     - Throw `Error("Imaginary part must be a finite number")` if imaginary is not finite
+   - Method `getReal(): number` - returns real component
+   - Method `getImaginary(): number` - returns imaginary component
+   - Method `toString(): string` - basic implementation returning format "a+bi"
+
+2. Follow existing code patterns from `typescript/basicMath.ts`:
+   - Use `typeof x !== 'number'` for type checking
+   - Use `!isFinite(x)` for finiteness checking
+   - Throw Error objects with descriptive messages
+
+**Deliverable**:
+- `typescript/complexNumbers.ts` created with ComplexNumber class
+- Constructor with validation implemented
+- Accessor methods implemented
+- Basic toString() method
+
+**Verification Instructions**:
+```bash
+# Compile the new class
+tsc --noEmit typescript/complexNumbers.ts
+
+# Add tests to testComplexNumbers.ts for:
+# 1. Valid construction: new ComplexNumber(3, 4)
+# 2. Optional imaginary: new ComplexNumber(5)
+# 3. Accessor methods: getReal() and getImaginary()
+# 4. Invalid inputs: non-numbers, NaN, Infinity
+# 5. Basic toString output
+
+# Compile and run tests
+tsc typescript/testComplexNumbers.ts typescript/complexNumbers.ts --outDir typescript/build
+node typescript/build/testComplexNumbers.js
+
+# All Phase 2 tests should PASS
+```
+
+### [ ] Step: Phase 3 - Arithmetic Operations (Addition and Subtraction)
+<!-- Implementation Phase 2 Part 1 -->
+
+**Task Definition**: Implement addition and subtraction operations for complex numbers.
+
+**Contracts Referenced**:
+- Arithmetic methods from spec.md:133-137
+- Mathematical formulas from spec.md:151-153
+- Immutability principle from spec.md:32
+
+**Task Instructions**:
+1. Add to `typescript/complexNumbers.ts`:
+   - Method `add(other: ComplexNumber): ComplexNumber`
+     - Formula: (a+bi) + (c+di) = (a+c) + (b+d)i
+     - Return new ComplexNumber instance
+     - No mutation of current instance
+   - Method `subtract(other: ComplexNumber): ComplexNumber`
+     - Formula: (a+bi) - (c+di) = (a-c) + (b-d)i
+     - Return new ComplexNumber instance
+     - No mutation of current instance
+
+2. Validate input: ensure `other` is a ComplexNumber instance
+
+**Deliverable**:
+- `add()` method implemented
+- `subtract()` method implemented
+- Both operations return new instances
+
+**Verification Instructions**:
+```bash
+# Add tests to testComplexNumbers.ts for:
+# 1. Addition: (3+4i) + (1+2i) = (4+6i)
+# 2. Subtraction: (5+3i) - (2+1i) = (3+2i)
+# 3. Identity: z + 0 = z
+# 4. Commutativity: z1 + z2 = z2 + z1
+# 5. Immutability: original objects unchanged
+
+# Compile and run tests
+tsc typescript/testComplexNumbers.ts typescript/complexNumbers.ts --outDir typescript/build
+node typescript/build/testComplexNumbers.js
+
+# All Phase 3 tests should PASS
+```
+
+### [ ] Step: Phase 4 - Arithmetic Operations (Multiplication and Division)
+<!-- Implementation Phase 2 Part 2 -->
+
+**Task Definition**: Implement multiplication and division operations with proper zero-division handling.
+
+**Contracts Referenced**:
+- Arithmetic methods from spec.md:133-137
+- Mathematical formulas from spec.md:154-158
+- Error conditions from spec.md:169-172
+
+**Task Instructions**:
+1. Add to `typescript/complexNumbers.ts`:
+   - Method `multiply(other: ComplexNumber): ComplexNumber`
+     - Formula: (a+bi)(c+di) = (ac-bd) + (ad+bc)i
+     - Return new ComplexNumber instance
+   - Method `divide(other: ComplexNumber): ComplexNumber`
+     - Formula: (a+bi)/(c+di) = [(ac+bd)/(c²+d²)] + [(bc-ad)/(c²+d²)]i
+     - Check if c² + d² = 0 (divisor is zero)
+     - Throw `Error("Division by zero complex number")` if divisor is (0+0i)
+     - Return new ComplexNumber instance
+
+2. Implementation notes:
+   - For division, calculate denominator: `denom = c² + d²`
+   - Check `denom === 0` before division
+   - Real part: `(a*c + b*d) / denom`
+   - Imaginary part: `(b*c - a*d) / denom`
+
+**Deliverable**:
+- `multiply()` method implemented
+- `divide()` method implemented with zero-division check
+- Proper error thrown for division by zero
+
+**Verification Instructions**:
+```bash
+# Add tests to testComplexNumbers.ts for:
+# 1. Multiplication: (1+2i) * (3+4i) = (-5+10i)
+# 2. Division: (6+8i) / (1+1i) = (7+1i)
+# 3. Identity: z * 1 = z
+# 4. Division by self: z / z = 1 (for non-zero z)
+# 5. Division by zero: throws error
+# 6. Verify: (a/b)*b ≈ a (within floating-point tolerance)
+
+# Compile and run tests
+tsc typescript/testComplexNumbers.ts typescript/complexNumbers.ts --outDir typescript/build
+node typescript/build/testComplexNumbers.js
+
+# All Phase 4 tests should PASS
+```
+
+### [ ] Step: Phase 5 - Properties and Derived Values
+<!-- Implementation Phase 3 -->
+
+**Task Definition**: Implement magnitude, phase, and conjugate operations.
+
+**Contracts Referenced**:
+- Property methods from spec.md:139-142
+- Mathematical formulas from spec.md:160-164
+
+**Task Instructions**:
+1. Add to `typescript/complexNumbers.ts`:
+   - Method `magnitude(): number`
+     - Formula: |a+bi| = √(a²+b²)
+     - Use `Math.sqrt(this.real * this.real + this.imag * this.imag)`
+     - Always returns non-negative number
+   - Method `phase(): number`
+     - Formula: arg(a+bi) = atan2(b, a)
+     - Use `Math.atan2(this.imag, this.real)`
+     - Returns angle in radians [-π, π]
+   - Method `conjugate(): ComplexNumber`
+     - Formula: conj(a+bi) = a-bi
+     - Return new ComplexNumber(this.real, -this.imag)
+
+**Deliverable**:
+- `magnitude()` method implemented
+- `phase()` method implemented
+- `conjugate()` method implemented
+
+**Verification Instructions**:
+```bash
+# Add tests to testComplexNumbers.ts for:
+# 1. Magnitude: |3+4i| = 5
+# 2. Magnitude: |1+1i| = √2 ≈ 1.414
+# 3. Phase: arg(1+1i) = π/4 ≈ 0.785
+# 4. Phase: arg(1+0i) = 0
+# 5. Phase: arg(0+1i) = π/2
+# 6. Conjugate: conj(3+4i) = 3-4i
+# 7. Identity: z * conj(z) = |z|² (important mathematical identity)
+# 8. Edge case: magnitude and phase of (0+0i)
+
+# Compile and run tests
+tsc typescript/testComplexNumbers.ts typescript/complexNumbers.ts --outDir typescript/build
+node typescript/build/testComplexNumbers.js
+
+# All Phase 5 tests should PASS
+```
+
+### [ ] Step: Phase 6 - Polar Form Support
+<!-- Implementation Phase 4 -->
+
+**Task Definition**: Implement polar form construction and conversion methods.
+
+**Contracts Referenced**:
+- Static factory method from spec.md:117-124
+- Conversion method from spec.md:144-145
+- Polar to Cartesian formula from spec.md:166
+
+**Task Instructions**:
+1. Add to `typescript/complexNumbers.ts`:
+   - Static method `static fromPolar(magnitude: number, phase: number): ComplexNumber`
+     - Validate magnitude and phase are finite numbers
+     - Throw `Error("Magnitude must be a finite number")` if invalid
+     - Throw `Error("Phase must be a finite number")` if invalid
+     - Formula: r∠θ = r*cos(θ) + r*sin(θ)i
+     - Calculate: real = magnitude * Math.cos(phase)
+     - Calculate: imag = magnitude * Math.sin(phase)
+     - Return new ComplexNumber(real, imag)
+   - Method `toPolar(): { magnitude: number; phase: number }`
+     - Return object with magnitude and phase properties
+     - Use existing magnitude() and phase() methods
+
+**Deliverable**:
+- `fromPolar()` static factory method implemented
+- `toPolar()` conversion method implemented
+- Input validation for polar coordinates
+
+**Verification Instructions**:
+```bash
+# Add tests to testComplexNumbers.ts for:
+# 1. fromPolar: r=√2, θ=π/4 → (1+1i)
+# 2. fromPolar: r=5, θ=atan2(4,3) → (3+4i)
+# 3. toPolar: (1+1i) → {magnitude: √2, phase: π/4}
+# 4. Round-trip: toPolar(fromPolar(r, θ)) ≈ {r, θ}
+# 5. Round-trip: fromPolar(z.toPolar()) ≈ z
+# 6. Invalid inputs to fromPolar: NaN, Infinity
+# 7. Edge case: fromPolar(0, any) = (0+0i)
+
+# Compile and run tests
+tsc typescript/testComplexNumbers.ts typescript/complexNumbers.ts --outDir typescript/build
+node typescript/build/testComplexNumbers.js
+
+# All Phase 6 tests should PASS
+```
+
+### [ ] Step: Phase 7 - Enhanced String Formatting
+<!-- Implementation Phase 5 -->
+
+**Task Definition**: Improve toString() method to handle all edge cases with proper formatting.
+
+**Contracts Referenced**:
+- toString method from spec.md:146
+- String formatting requirements from requirements.md:83-87
+- Test cases from spec.md:318-321
+
+**Task Instructions**:
+1. Enhance `toString()` method in `typescript/complexNumbers.ts`:
+   - Handle zero imaginary part: "5+0i" → "5"
+   - Handle zero real part: "0+3i" → "3i"
+   - Handle negative imaginary: "3+-4i" → "3-4i"
+   - Handle both zero: "0+0i" → "0"
+   - Handle imaginary = 1: "0+1i" → "i"
+   - Handle imaginary = -1: "0+-1i" → "-i"
+
+2. Implementation logic:
+   - If real = 0 and imag = 0: return "0"
+   - If imag = 0: return `${this.real}`
+   - If real = 0 and imag ≠ 0: return imaginary part only
+     - If imag = 1: return "i"
+     - If imag = -1: return "-i"
+     - Otherwise: return `${this.imag}i`
+   - If both non-zero:
+     - Start with real part
+     - Add "+" or "-" based on sign of imaginary
+     - Add absolute value of imaginary (handle special case of ±1)
+     - Add "i"
+
+**Deliverable**:
+- Enhanced `toString()` method with all edge cases handled
+- Human-readable output for all complex number values
+
+**Verification Instructions**:
+```bash
+# Add tests to testComplexNumbers.ts for:
+# 1. Standard form: (3+4i).toString() = "3+4i"
+# 2. Negative imaginary: (3-4i).toString() = "3-4i"
+# 3. Pure real: (5+0i).toString() = "5"
+# 4. Pure imaginary: (0+3i).toString() = "3i"
+# 5. Zero: (0+0i).toString() = "0"
+# 6. Imaginary = 1: (2+1i).toString() = "2+i"
+# 7. Imaginary = -1: (2-1i).toString() = "2-i"
+# 8. Just i: (0+1i).toString() = "i"
+# 9. Just -i: (0-1i).toString() = "-i"
+# 10. Negative real: (-3+4i).toString() = "-3+4i"
+
+# Compile and run tests
+tsc typescript/testComplexNumbers.ts typescript/complexNumbers.ts --outDir typescript/build
+node typescript/build/testComplexNumbers.js
+
+# All Phase 7 tests should PASS
+```
+
+### [ ] Step: Phase 8 - Final Integration and CI Verification
+<!-- Final verification phase -->
+
+**Task Definition**: Perform final verification of all functionality, ensure CI integration, and create optional interactive verification script.
+
+**Contracts Referenced**:
+- CI integration from spec.md:240-242
+- Verification workflow from spec.md:354-391
+- Interactive script from spec.md:272-279
+
+**Task Instructions**:
+1. Final code review:
+   - Verify all methods follow existing code style from `typescript/basicMath.ts`
+   - Ensure consistent error messages
+   - Check all type annotations are present
+   - Verify immutability (no methods mutate the instance)
+
+2. CI Integration:
+   - Verify `.github/workflows/main.yml` includes `typescript/*.ts` (should already)
+   - Test that CI workflow compiles the new file
+
+3. Create `typescript/complexVerification.ts` (optional interactive script):
+   - Import ComplexNumber class
+   - Create several example complex numbers
+   - Demonstrate all operations with console output
+   - Show both Cartesian and polar representations
+   - Useful for manual exploration
+
+4. Run comprehensive verification:
+   - All TypeScript files compile without errors
+   - Complete test suite passes (100% pass rate)
+   - Visual inspection of toString() output
+   - Verify mathematical identities
+
+**Deliverable**:
+- All code following repository conventions
+- Complete test suite passing
+- Optional interactive verification script
+- CI pipeline successfully compiling all files
+
+**Verification Instructions**:
+```bash
+# Compile all TypeScript files
+tsc --noEmit typescript/*.ts
+
+# Should succeed with exit code 0
+echo $?
+
+# Run complete test suite
+tsc typescript/testComplexNumbers.ts typescript/complexNumbers.ts --outDir typescript/build
+node typescript/build/testComplexNumbers.js
+
+# All tests should PASS
+
+# If interactive script created, run it
+tsc typescript/complexVerification.ts typescript/complexNumbers.ts --outDir typescript/build
+node typescript/build/complexVerification.js
+
+# Should display examples of all operations
+
+# Verify CI will pass (if possible to run locally)
+# Check that typescript/complexNumbers.ts is covered by existing CI glob patterns
+```
+
+### [ ] Step: Phase 9 - Documentation and Completion
+<!-- Final documentation -->
+
+**Task Definition**: Add any necessary documentation and verify all success criteria are met.
+
+**Contracts Referenced**:
+- Success metrics from spec.md:385-391
+- Success criteria from requirements.md:124-160
+
+**Task Instructions**:
+1. Review all success criteria from requirements.md:
+   - Completeness: All operations and properties implemented ✓
+   - Correctness: Mathematical accuracy verified ✓
+   - Robustness: Error handling tested ✓
+   - Code Quality: TypeScript compiles without errors ✓
+   - Usability: Intuitive API and readable output ✓
+   - Testability: Comprehensive test coverage ✓
+
+2. Add code comments if needed:
+   - Note: Existing code in repo has minimal comments
+   - Follow existing patterns (minimal inline comments)
+   - Complex formulas may benefit from brief comments
+
+3. Final verification checklist:
+   - [ ] All arithmetic operations work correctly
+   - [ ] All properties (magnitude, phase, conjugate) work correctly
+   - [ ] Both Cartesian and polar forms supported
+   - [ ] String formatting handles all edge cases
+   - [ ] Input validation prevents invalid complex numbers
+   - [ ] Division by zero properly prevented
+   - [ ] All operations return new instances (immutability)
+   - [ ] TypeScript compilation succeeds
+   - [ ] Complete test suite passes
+   - [ ] Code style matches existing TypeScript files
+
+**Deliverable**:
+- Fully implemented and tested ComplexNumber class
+- All requirements met
+- All success criteria satisfied
+- Ready for integration into main codebase
+
+**Verification Instructions**:
+```bash
+# Final comprehensive check
+tsc --noEmit typescript/*.ts
+echo "TypeScript compilation: $?"
+
+tsc typescript/testComplexNumbers.ts typescript/complexNumbers.ts --outDir typescript/build
+node typescript/build/testComplexNumbers.js
+echo "Test suite result: $?"
+
+# Review against all requirements in requirements.md
+# Review against all success criteria in requirements.md
+
+# Confirm implementation is complete and ready
+```
