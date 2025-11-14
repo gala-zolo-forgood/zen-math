@@ -25,4 +25,12 @@ export class ComplexNumber {
   toString(): string {
     return `${this.real}+${this.imag}i`;
   }
+
+  magnitude(): number {
+    return Math.sqrt(this.real * this.real + this.imag * this.imag);
+  }
+
+  phase(): number {
+    return Math.atan2(this.imag, this.real);
+  }
 }
