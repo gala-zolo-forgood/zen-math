@@ -105,6 +105,7 @@ Task instructions
 ## Implementation Tasks
 
 ### [ ] Step: Phase 1 - Create Test Infrastructure
+<!-- chat-id: e08bf8e6-8f61-4482-958e-cfbc6988ec44 -->
 <!-- Implementation Phase 1 Preparation -->
 
 **Task Definition**: Create the test script infrastructure that will be used to verify all subsequent phases of development.
@@ -139,6 +140,7 @@ echo $?
 ```
 
 ### [ ] Step: Phase 2 - Core ComplexNumber Class with Cartesian Construction
+<!-- chat-id: 13501214-5132-484a-9103-983c0324fee7 -->
 <!-- Implementation Phase 1 from spec -->
 
 **Task Definition**: Implement the foundational ComplexNumber class with Cartesian coordinate construction, validation, and basic accessors.
@@ -194,6 +196,7 @@ node typescript/build/testComplexNumbers.js
 ```
 
 ### [ ] Step: Phase 3 - Arithmetic Operations (Addition and Subtraction)
+<!-- chat-id: e331d3c1-d46c-4127-a1a6-bfc40e88fb70 -->
 <!-- Implementation Phase 2 Part 1 -->
 
 **Task Definition**: Implement addition and subtraction operations for complex numbers.
@@ -238,6 +241,7 @@ node typescript/build/testComplexNumbers.js
 ```
 
 ### [ ] Step: Phase 4 - Arithmetic Operations (Multiplication and Division)
+<!-- chat-id: f891a131-0383-40d6-b7b7-8f0931a1bed0 -->
 <!-- Implementation Phase 2 Part 2 -->
 
 **Task Definition**: Implement multiplication and division operations with proper zero-division handling.
@@ -287,6 +291,7 @@ node typescript/build/testComplexNumbers.js
 ```
 
 ### [ ] Step: Phase 5 - Properties and Derived Values
+<!-- chat-id: 34c0015e-04fb-4051-9971-77ff43c41cbe -->
 <!-- Implementation Phase 3 -->
 
 **Task Definition**: Implement magnitude, phase, and conjugate operations.
@@ -334,6 +339,7 @@ node typescript/build/testComplexNumbers.js
 ```
 
 ### [ ] Step: Phase 6 - Polar Form Support
+<!-- chat-id: bc6064dd-82c1-46a2-8806-fec7b8762700 -->
 <!-- Implementation Phase 4 -->
 
 **Task Definition**: Implement polar form construction and conversion methods.
@@ -381,6 +387,7 @@ node typescript/build/testComplexNumbers.js
 ```
 
 ### [ ] Step: Phase 7 - Enhanced String Formatting
+<!-- chat-id: a8a4aa7d-2ff1-45fb-90ef-c621e47e9843 -->
 <!-- Implementation Phase 5 -->
 
 **Task Definition**: Improve toString() method to handle all edge cases with proper formatting.
@@ -438,6 +445,7 @@ node typescript/build/testComplexNumbers.js
 ```
 
 ### [ ] Step: Phase 8 - Final Integration and CI Verification
+<!-- chat-id: 4a52d279-4237-4e80-96e3-b067af67aa56 -->
 <!-- Final verification phase -->
 
 **Task Definition**: Perform final verification of all functionality, ensure CI integration, and create optional interactive verification script.
@@ -502,6 +510,7 @@ node typescript/build/complexVerification.js
 ```
 
 ### [ ] Step: Phase 9 - Documentation and Completion
+<!-- chat-id: f7235b5f-bd20-4eb6-9e89-fbecc0e76f0c -->
 <!-- Final documentation -->
 
 **Task Definition**: Add any necessary documentation and verify all success criteria are met.
