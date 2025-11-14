@@ -9,7 +9,7 @@ the actual path should be substituted for {@artifacts_path}
 
 ## Workflow Steps
 
-### [ ] Step: Requirements
+### [x] Step: Requirements
 <!-- chat-id: 9b6b99eb-54b6-4ee4-8ab9-2b09f24a3bc3 -->
 
 Your job is to generate a Product Requirements Document based on the feature description,
