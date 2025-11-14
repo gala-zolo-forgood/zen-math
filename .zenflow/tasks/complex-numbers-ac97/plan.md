@@ -290,7 +290,7 @@ node typescript/build/testComplexNumbers.js
 # All Phase 4 tests should PASS
 ```
 
-### [ ] Step: Phase 5 - Properties and Derived Values
+### [x] Step: Phase 5 - Properties and Derived Values
 <!-- chat-id: 34c0015e-04fb-4051-9971-77ff43c41cbe -->
 <!-- Implementation Phase 3 -->
 

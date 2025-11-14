@@ -336,6 +336,65 @@ function main(): void {
     assertClose(result.getImaginary(), a.getImaginary(), 1e-10, 'Imaginary parts should match');
   });
 
+  // Phase 5: Properties and Derived Values
+  console.log(`\n${COLORS.yellow}Phase 5: Properties and Derived Values${COLORS.reset}`);
+
+  runTest('Magnitude: |3+4i| = 5', () => {
+    const z = new ComplexNumber(3, 4);
+    const mag = z.magnitude();
+    assertClose(mag, 5, 1e-10, 'Magnitude of 3+4i should be 5');
+  });
+
+  runTest('Magnitude: |1+1i| = √2 ≈ 1.414', () => {
+    const z = new ComplexNumber(1, 1);
+    const mag = z.magnitude();
+    assertClose(mag, Math.sqrt(2), 1e-10, 'Magnitude of 1+1i should be √2');
+  });
+
+  runTest('Phase: arg(1+1i) = π/4 ≈ 0.785', () => {
+    const z = new ComplexNumber(1, 1);
+    const phase = z.phase();
+    assertClose(phase, Math.PI / 4, 1e-10, 'Phase of 1+1i should be π/4');
+  });
+
+  runTest('Phase: arg(1+0i) = 0', () => {
+    const z = new ComplexNumber(1, 0);
+    const phase = z.phase();
+    assertClose(phase, 0, 1e-10, 'Phase of 1+0i should be 0');
+  });
+
+  runTest('Phase: arg(0+1i) = π/2', () => {
+    const z = new ComplexNumber(0, 1);
+    const phase = z.phase();
+    assertClose(phase, Math.PI / 2, 1e-10, 'Phase of 0+1i should be π/2');
+  });
+
+  runTest('Conjugate: conj(3+4i) = 3-4i', () => {
+    const z = new ComplexNumber(3, 4);
+    const conj = z.conjugate();
+    assert(conj.getReal() === 3, 'Real part of conjugate should be 3');
+    assert(conj.getImaginary() === -4, 'Imaginary part of conjugate should be -4');
+  });
+
+  runTest('Identity: z * conj(z) = |z|² (important mathematical identity)', () => {
+    const z = new ComplexNumber(3, 4);
+    const conj = z.conjugate();
+    const product = z.multiply(conj);
+    const magSquared = z.magnitude() * z.magnitude();
+
+    assertClose(product.getReal(), magSquared, 1e-10, 'Real part should equal |z|²');
+    assertClose(product.getImaginary(), 0, 1e-10, 'Imaginary part should be 0');
+  });
+
+  runTest('Edge case: magnitude and phase of (0+0i)', () => {
+    const z = new ComplexNumber(0, 0);
+    const mag = z.magnitude();
+    const phase = z.phase();
+
+    assertClose(mag, 0, 1e-10, 'Magnitude of (0+0i) should be 0');
+    assertClose(phase, 0, 1e-10, 'Phase of (0+0i) should be 0');
+  });
+
   // Phase 6: Polar Form Support
   console.log(`\n${COLORS.yellow}Phase 6: Polar Form Support${COLORS.reset}`);
 
