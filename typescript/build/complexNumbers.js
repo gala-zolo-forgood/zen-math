@@ -31,7 +31,45 @@ var ComplexNumber = /** @class */ (function () {
         return this.imag;
     };
     ComplexNumber.prototype.toString = function () {
-        return "".concat(this.real, "+").concat(this.imag, "i");
+        // Handle zero
+        if (this.real === 0 && this.imag === 0) {
+            return "0";
+        }
+        // Handle pure real (imaginary = 0)
+        if (this.imag === 0) {
+            return "".concat(this.real);
+        }
+        // Handle pure imaginary (real = 0)
+        if (this.real === 0) {
+            if (this.imag === 1) {
+                return "i";
+            }
+            if (this.imag === -1) {
+                return "-i";
+            }
+            return "".concat(this.imag, "i");
+        }
+        // Handle both real and imaginary parts
+        var result = "".concat(this.real);
+        if (this.imag > 0) {
+            result += "+";
+            if (this.imag === 1) {
+                result += "i";
+            }
+            else {
+                result += "".concat(this.imag, "i");
+            }
+        }
+        else {
+            // Negative imaginary part
+            if (this.imag === -1) {
+                result += "-i";
+            }
+            else {
+                result += "".concat(this.imag, "i");
+            }
+        }
+        return result;
     };
     ComplexNumber.prototype.magnitude = function () {
         return Math.sqrt(this.real * this.real + this.imag * this.imag);
@@ -64,6 +102,9 @@ var ComplexNumber = /** @class */ (function () {
         var realPart = (this.real * other.real + this.imag * other.imag) / denominator;
         var imagPart = (this.imag * other.real - this.real * other.imag) / denominator;
         return new ComplexNumber(realPart, imagPart);
+    };
+    ComplexNumber.prototype.conjugate = function () {
+        return new ComplexNumber(this.real, -this.imag);
     };
     return ComplexNumber;
 }());

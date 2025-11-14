@@ -36,7 +36,47 @@ export class ComplexNumber {
   }
 
   toString(): string {
-    return `${this.real}+${this.imag}i`;
+    // Handle zero
+    if (this.real === 0 && this.imag === 0) {
+      return "0";
+    }
+
+    // Handle pure real (imaginary = 0)
+    if (this.imag === 0) {
+      return `${this.real}`;
+    }
+
+    // Handle pure imaginary (real = 0)
+    if (this.real === 0) {
+      if (this.imag === 1) {
+        return "i";
+      }
+      if (this.imag === -1) {
+        return "-i";
+      }
+      return `${this.imag}i`;
+    }
+
+    // Handle both real and imaginary parts
+    let result = `${this.real}`;
+
+    if (this.imag > 0) {
+      result += "+";
+      if (this.imag === 1) {
+        result += "i";
+      } else {
+        result += `${this.imag}i`;
+      }
+    } else {
+      // Negative imaginary part
+      if (this.imag === -1) {
+        result += "-i";
+      } else {
+        result += `${this.imag}i`;
+      }
+    }
+
+    return result;
   }
 
   magnitude(): number {
@@ -84,5 +124,9 @@ export class ComplexNumber {
     const realPart = (this.real * other.real + this.imag * other.imag) / denominator;
     const imagPart = (this.imag * other.real - this.real * other.imag) / denominator;
     return new ComplexNumber(realPart, imagPart);
+  }
+
+  conjugate(): ComplexNumber {
+    return new ComplexNumber(this.real, -this.imag);
   }
 }
