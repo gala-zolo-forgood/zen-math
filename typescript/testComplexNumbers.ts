@@ -496,6 +496,85 @@ function main(): void {
     assertClose(z3.getImaginary(), 0, 1e-10, 'Imaginary part should be 0');
   });
 
+  // Phase 7: Enhanced String Formatting
+  console.log(`\n${COLORS.yellow}Phase 7: Enhanced String Formatting${COLORS.reset}`);
+
+  runTest('Standard form: (3+4i).toString() = "3+4i"', () => {
+    const z = new ComplexNumber(3, 4);
+    assert(z.toString() === '3+4i', 'toString() should return "3+4i"');
+  });
+
+  runTest('Negative imaginary: (3-4i).toString() = "3-4i"', () => {
+    const z = new ComplexNumber(3, -4);
+    assert(z.toString() === '3-4i', 'toString() should return "3-4i"');
+  });
+
+  runTest('Pure real: (5+0i).toString() = "5"', () => {
+    const z = new ComplexNumber(5, 0);
+    assert(z.toString() === '5', 'toString() should return "5"');
+  });
+
+  runTest('Pure imaginary: (0+3i).toString() = "3i"', () => {
+    const z = new ComplexNumber(0, 3);
+    assert(z.toString() === '3i', 'toString() should return "3i"');
+  });
+
+  runTest('Zero: (0+0i).toString() = "0"', () => {
+    const z = new ComplexNumber(0, 0);
+    assert(z.toString() === '0', 'toString() should return "0"');
+  });
+
+  runTest('Imaginary = 1: (2+1i).toString() = "2+i"', () => {
+    const z = new ComplexNumber(2, 1);
+    assert(z.toString() === '2+i', 'toString() should return "2+i"');
+  });
+
+  runTest('Imaginary = -1: (2-1i).toString() = "2-i"', () => {
+    const z = new ComplexNumber(2, -1);
+    assert(z.toString() === '2-i', 'toString() should return "2-i"');
+  });
+
+  runTest('Just i: (0+1i).toString() = "i"', () => {
+    const z = new ComplexNumber(0, 1);
+    assert(z.toString() === 'i', 'toString() should return "i"');
+  });
+
+  runTest('Just -i: (0-1i).toString() = "-i"', () => {
+    const z = new ComplexNumber(0, -1);
+    assert(z.toString() === '-i', 'toString() should return "-i"');
+  });
+
+  runTest('Negative real: (-3+4i).toString() = "-3+4i"', () => {
+    const z = new ComplexNumber(-3, 4);
+    assert(z.toString() === '-3+4i', 'toString() should return "-3+4i"');
+  });
+
+  // Additional edge cases for comprehensive coverage
+  runTest('Negative real and imaginary: (-3-4i).toString() = "-3-4i"', () => {
+    const z = new ComplexNumber(-3, -4);
+    assert(z.toString() === '-3-4i', 'toString() should return "-3-4i"');
+  });
+
+  runTest('Pure real negative: (-5+0i).toString() = "-5"', () => {
+    const z = new ComplexNumber(-5, 0);
+    assert(z.toString() === '-5', 'toString() should return "-5"');
+  });
+
+  runTest('Pure imaginary negative: (0-3i).toString() = "-3i"', () => {
+    const z = new ComplexNumber(0, -3);
+    assert(z.toString() === '-3i', 'toString() should return "-3i"');
+  });
+
+  runTest('Fractional values: (1.5+2.5i).toString() = "1.5+2.5i"', () => {
+    const z = new ComplexNumber(1.5, 2.5);
+    assert(z.toString() === '1.5+2.5i', 'toString() should return "1.5+2.5i"');
+  });
+
+  runTest('Fractional with imaginary = 1: (3.7+1i).toString() = "3.7+i"', () => {
+    const z = new ComplexNumber(3.7, 1);
+    assert(z.toString() === '3.7+i', 'toString() should return "3.7+i"');
+  });
+
   // Print summary
   printSummary();
 
