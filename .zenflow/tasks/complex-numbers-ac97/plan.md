@@ -139,7 +139,7 @@ tsc --noEmit typescript/testComplexNumbers.ts
 echo $?
 ```
 
-### [ ] Step: Phase 2 - Core ComplexNumber Class with Cartesian Construction
+### [x] Step: Phase 2 - Core ComplexNumber Class with Cartesian Construction
 <!-- chat-id: 13501214-5132-484a-9103-983c0324fee7 -->
 <!-- Implementation Phase 1 from spec -->
 

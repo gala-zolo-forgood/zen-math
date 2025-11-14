@@ -233,6 +233,109 @@ function main(): void {
     assert(z.getImaginary() === -5, 'Imaginary part should be -5');
   });
 
+  // Phase 3: Addition and Subtraction Tests
+  console.log(`\n${COLORS.yellow}Phase 3: Addition and Subtraction${COLORS.reset}`);
+
+  runTest('Addition: (3+4i) + (1+2i) = (4+6i)', () => {
+    const z1 = new ComplexNumber(3, 4);
+    const z2 = new ComplexNumber(1, 2);
+    const result = z1.add(z2);
+    assert(result.getReal() === 4, 'Real part should be 4');
+    assert(result.getImaginary() === 6, 'Imaginary part should be 6');
+  });
+
+  runTest('Subtraction: (5+3i) - (2+1i) = (3+2i)', () => {
+    const z1 = new ComplexNumber(5, 3);
+    const z2 = new ComplexNumber(2, 1);
+    const result = z1.subtract(z2);
+    assert(result.getReal() === 3, 'Real part should be 3');
+    assert(result.getImaginary() === 2, 'Imaginary part should be 2');
+  });
+
+  runTest('Identity: z + 0 = z', () => {
+    const z = new ComplexNumber(3, 4);
+    const zero = new ComplexNumber(0, 0);
+    const result = z.add(zero);
+    assert(result.getReal() === 3, 'Real part should be 3');
+    assert(result.getImaginary() === 4, 'Imaginary part should be 4');
+  });
+
+  runTest('Commutativity: z1 + z2 = z2 + z1', () => {
+    const z1 = new ComplexNumber(2, 3);
+    const z2 = new ComplexNumber(5, 7);
+    const r1 = z1.add(z2);
+    const r2 = z2.add(z1);
+    assert(r1.getReal() === r2.getReal(), 'Real parts should be equal');
+    assert(r1.getImaginary() === r2.getImaginary(), 'Imaginary parts should be equal');
+  });
+
+  runTest('Immutability: original objects unchanged after addition', () => {
+    const z1 = new ComplexNumber(3, 4);
+    const z2 = new ComplexNumber(1, 2);
+    z1.add(z2);
+    assert(z1.getReal() === 3, 'z1 real part should be unchanged');
+    assert(z1.getImaginary() === 4, 'z1 imaginary part should be unchanged');
+    assert(z2.getReal() === 1, 'z2 real part should be unchanged');
+    assert(z2.getImaginary() === 2, 'z2 imaginary part should be unchanged');
+  });
+
+  // Phase 4: Multiplication and Division Tests
+  console.log(`\n${COLORS.yellow}Phase 4: Multiplication and Division${COLORS.reset}`);
+
+  runTest('Multiplication: (1+2i) * (3+4i) = (-5+10i)', () => {
+    const z1 = new ComplexNumber(1, 2);
+    const z2 = new ComplexNumber(3, 4);
+    const result = z1.multiply(z2);
+    assert(result.getReal() === -5, 'Real part should be -5');
+    assert(result.getImaginary() === 10, 'Imaginary part should be 10');
+  });
+
+  runTest('Division: (6+8i) / (1+1i) = (7+1i)', () => {
+    const z1 = new ComplexNumber(6, 8);
+    const z2 = new ComplexNumber(1, 1);
+    const result = z1.divide(z2);
+    assert(result.getReal() === 7, 'Real part should be 7');
+    assert(result.getImaginary() === 1, 'Imaginary part should be 1');
+  });
+
+  runTest('Identity: z * 1 = z', () => {
+    const z = new ComplexNumber(3, 4);
+    const one = new ComplexNumber(1, 0);
+    const result = z.multiply(one);
+    assert(result.getReal() === 3, 'Real part should be 3');
+    assert(result.getImaginary() === 4, 'Imaginary part should be 4');
+  });
+
+  runTest('Division by self: z / z = 1 (for non-zero z)', () => {
+    const z = new ComplexNumber(3, 4);
+    const result = z.divide(z);
+    assertClose(result.getReal(), 1, 1e-10, 'Real part should be 1');
+    assertClose(result.getImaginary(), 0, 1e-10, 'Imaginary part should be 0');
+  });
+
+  runTest('Division by zero: throws error', () => {
+    const z = new ComplexNumber(1, 2);
+    const zero = new ComplexNumber(0, 0);
+    let threw = false;
+    let errorMessage = '';
+    try {
+      z.divide(zero);
+    } catch (e) {
+      threw = true;
+      errorMessage = e instanceof Error ? e.message : String(e);
+    }
+    assert(threw, 'Should throw error on division by zero');
+    assert(errorMessage === 'Division by zero complex number', 'Error message should match');
+  });
+
+  runTest('Verify: (a/b)*b ≈ a (within floating-point tolerance)', () => {
+    const a = new ComplexNumber(5, 7);
+    const b = new ComplexNumber(3, 4);
+    const result = a.divide(b).multiply(b);
+    assertClose(result.getReal(), a.getReal(), 1e-10, 'Real parts should match');
+    assertClose(result.getImaginary(), a.getImaginary(), 1e-10, 'Imaginary parts should match');
+  });
+
   // Print summary
   printSummary();
 
