@@ -13,7 +13,7 @@ const basicMath = {
   
   divide: function(a, b) {
     if (b === 0) {
-      throw new Error("Division by zero");
+      throw new Error("Error: Division by zero");
     }
     return a / b;
   },
