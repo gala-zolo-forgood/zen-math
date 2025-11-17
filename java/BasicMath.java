@@ -14,9 +14,6 @@ public class BasicMath {
     }
     
     public static double divide(int a, int b) {
-        if (b == 0) {
-            throw new ArithmeticException("Division by zero");
-        }
         return (double) a / b;
     }
     
@@ -34,7 +31,7 @@ public class BasicMath {
 
     public static int factorial(int n) {
         if (n < 0) {
-            throw new IllegalArgumentException("Negative numbers not supported");
+            throw new IllegalArgumentException("Negative numbers not supported!");
         }
         int result = 1;
         for (int i = 1; i <= n; i++) {
